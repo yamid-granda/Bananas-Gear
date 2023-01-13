@@ -1,0 +1,11 @@
+.ss-input {
+  border: $border-base;
+}
+
+.ss-input__input {
+  border: 0;
+  width: 100%;
+  outline: 0;
+  height: $input-height;
+  padding: 0 $input-padding;
+}
