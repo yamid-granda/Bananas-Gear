@@ -1,17 +1,28 @@
+import * as path from 'path'
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react-swc'
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+  ],
+
+  resolve: {
+    alias: [
+      { find: '@/ui', replacement: path.resolve(__dirname, '../ui') },
+      { find: '@/components', replacement: path.resolve(__dirname, '../ui/src/components') },
+      { find: '@/app', replacement: path.resolve(__dirname, './src') },
+    ],
+  },
 
   css: {
     preprocessorOptions: {
       scss: {
         additionalData: `
           @use 'sass:math';
-          @use "./src/styles/index" as *;
+          @use "../styles/index" as *;
         `,
       },
     },
-  }
+  },
 })

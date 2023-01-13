@@ -3,20 +3,21 @@ import './Input.scss'
 
 export interface InputProps {
   value: string
-  setValue: (value: string) => void
+  onInput: (value: string, event: ChangeEvent<HTMLInputElement>) => void
 }
 
 export default function Input(props: InputProps) {
-  function onInput(event: ChangeEvent<HTMLInputElement>) {
-    props.setValue(event.target.value)
+  function onInputInput(event: ChangeEvent<HTMLInputElement>) {
+    props.onInput(event.target.value, event)
   }
 
   return (
     <div className="ss-input">
       <input
+        {...props}
         className='ss-input__input'
         value={props.value}
-        onInput={onInput}
+        onInput={onInputInput}
       />
     </div>
   )
