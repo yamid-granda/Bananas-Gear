@@ -18,6 +18,7 @@ export interface InputProps extends ReactInputProps {
   name: string
   label?: string
   state?: State
+  message?: string
   onInput?: (value: string, event: HTMLInputEvent) => void
   onFocus?: (event: HTMLInputEvent) => void
   onBlur?: (event: HTMLInputEvent) => void
@@ -65,19 +66,32 @@ export default function Input(props: InputProps) {
     )
   }, [props.label])
 
+  const messageTemplate = useMemo(() => {
+    if (!props.message)
+      return null
+
+    return (
+      <div className='ss-input__message'>
+        <span className='ss-input__message-text'>{props.message}</span>
+      </div>
+    )
+  }, [props.message])
+
   return (
     <div className={classes}>
       <div className="ss-input__wrap">
         <input
-          {...props}
           className='ss-input__input'
           value={props.value}
           onInput={onInput}
           onFocus={onFocus}
           onBlur={onBlur}
         />
+
         {labelTemplate}
       </div>
+
+      {messageTemplate}
     </div>
   )
 }

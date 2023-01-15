@@ -1,13 +1,13 @@
 $input-height-without-border: $input-height - ($border-width * 2);
 
 .ss-input {
+  position: relative;
   border: $border-base;
   border-radius: $border-radius-base;
   background-color: $color-white;
 }
 
 .ss-input__wrap {
-  position: relative;
   display: flex;
   flex-direction: row-reverse;
 }
@@ -45,6 +45,24 @@ $input-height-without-border: $input-height - ($border-width * 2);
   transition: $transition-base;
 }
 
+.ss-input__message {
+  position: absolute;
+  bottom: -$spacing-5;
+  left: -$border-width;
+  overflow: hidden;
+  max-width: calc(100% + ($border-width * 2));
+  height: $spacing-8;
+  padding: ($spacing-1 + $spacing-2) $input-padding;
+  border: $border-base;
+  border-radius: 0 $border-radius-base $border-radius-base $border-radius-base;
+  border-top-color: transparent;
+  background-color: $color-white;
+  color: $color-text-light;
+  font-size: $font-size-xs;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .ss-input--focus,
 .ss-input--active {
   .ss-input__label {
@@ -60,8 +78,14 @@ $input-height-without-border: $input-height - ($border-width * 2);
   border-color: $color-danger;
   color: $color-danger;
 
-  .ss-input__label {
+  .ss-input__label,
+  .ss-input__message {
     color: $color-danger;
+  }
+
+  .ss-input__message {
+    border-color: $color-danger;
+    border-top-color: transparent;
   }
 
   &.ss-input--focus,
