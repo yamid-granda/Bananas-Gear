@@ -2,6 +2,7 @@ import type { ChangeEvent, DetailedHTMLProps, InputHTMLAttributes } from 'react'
 import { useMemo, useState } from 'react'
 import './Input.scss'
 import classnames from 'classnames'
+import type { State } from '@/ui/types'
 
 type ReactInputProps = Omit<
   Partial<DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>>,
@@ -16,6 +17,7 @@ export interface InputProps extends ReactInputProps {
   value: string
   name: string
   label?: string
+  state?: State
   onInput?: (value: string, event: HTMLInputEvent) => void
   onFocus?: (event: HTMLInputEvent) => void
   onBlur?: (event: HTMLInputEvent) => void
@@ -28,9 +30,11 @@ export default function Input(props: InputProps) {
     'ss-input': true,
     'ss-input--focus': isFocused,
     'ss-input--active': props.value,
+    'ss-input--error': props.state === 'error',
   }), [
     isFocused,
     props.value,
+    props.state,
   ])
 
   function onInput(event: HTMLInputEvent) {

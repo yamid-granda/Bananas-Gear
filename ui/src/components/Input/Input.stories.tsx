@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import type { ComponentMeta, ComponentStory } from '@storybook/react'
 
-import FormItem from '../FormItem/FormItem'
 import Input from './Input'
+import FormItem from '@/ui/components/FormItem/FormItem'
 
 export default {
   title: 'Input',
@@ -41,6 +41,20 @@ export const WithLabel: ComponentStory<typeof Input> = () => {
       value={value}
       name="WithLabel"
       label='Label text'
+      onInput={setValue}
+    />
+  )
+}
+
+export const ErrorState: ComponentStory<typeof Input> = () => {
+  const [value, setValue] = useState('')
+
+  return (
+    <Input
+      value={value}
+      name="ErrorState"
+      label='Label text'
+      state="error"
       onInput={setValue}
     />
   )

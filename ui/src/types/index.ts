@@ -1,5 +1,1 @@
-export enum State {
-  error = 'error',
-  success = 'success',
-  warning = 'warning',
-}
+export type State = 'error' | 'success' | 'info' | 'warning'

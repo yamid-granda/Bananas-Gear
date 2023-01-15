@@ -25,12 +25,14 @@ $input-height-without-border: $input-height - ($border-width * 2);
 .ss-input__label {
   position: absolute;
   top: $spacing-5 - ($spacing-1 + $spacing-2);
-  left: 0;
+  left: -$border-width;
   display: flex;
   height: $spacing-8;
   flex-shrink: 0;
   align-items: center;
   padding: 0 $input-padding;
+  border: $border-base;
+  border-color: transparent;
   border-radius: $border-radius-base $border-radius-base $border-radius-base 0;
   margin-right: -$input-padding + $spacing-3;
   background-color: transparent;
@@ -47,7 +49,26 @@ $input-height-without-border: $input-height - ($border-width * 2);
 .ss-input--active {
   .ss-input__label {
     top: -$spacing-5;
+    border-color: $border-color-base;
+    border-bottom-color: transparent;
     background-color: $color-white;
     font-size: $font-size-xs;
+  }
+}
+
+.ss-input--error {
+  border-color: $color-danger;
+  color: $color-danger;
+
+  .ss-input__label {
+    color: $color-danger;
+  }
+
+  &.ss-input--focus,
+  &.ss-input--active {
+    .ss-input__label {
+      border-color: $color-danger;
+      border-bottom-color: transparent;
+    }
   }
 }

@@ -1,4 +1,5 @@
 const { mergeConfig } = require('vite');
+const path = require('path')
 
 module.exports = {
   "stories": [
@@ -19,6 +20,12 @@ module.exports = {
   },
   async viteFinal(config) {
     return mergeConfig(config, {
+      resolve: {
+        alias: [
+          { find: '@/ui', replacement: path.resolve(__dirname, '../src') },
+        ],
+      },
+
       css: {
         postcss: null,
         preprocessorOptions: {
