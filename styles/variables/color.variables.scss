@@ -69,7 +69,7 @@ $color-green-0: var(--color-green-0);
 
 $color-hover: $color-gray-9;
 
-$color-primary: #0076FF;
+$color-primary: $color-teal-2;
 $color-primary-hover: $color-teal-4;
 $color-primary-active: $color-teal-4;
 $color-primary-light: $color-teal-9;
@@ -102,12 +102,6 @@ $color-info-active: $color-teal-4;
 $color-info-light: $color-teal-9;
 $color-info-light-hover: $color-teal-8;
 
-// challenge
-
-$cc-gray-1: #E5E5EA;
-$cc-gray-2: #A0A4A8;
-$cc-gray-3: #F7F7F7;
-
 // -------------------------------------------------
 // + Body
 // -------------------------------------------------
@@ -119,8 +113,8 @@ $body-bg-image: linear-gradient(to right, $color-body, $color-hot-gray-8);
 // + Text
 // -------------------------------------------------
 
-$color-text: var(--color-gray-1);
-$color-text-light: $cc-gray-2;
+$color-text: $color-gray-1;
+$color-text-light: $color-gray-2;
 $color-text-danger: $color-red-0;
 
 // -------------------------------------------------

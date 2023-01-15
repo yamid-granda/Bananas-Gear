@@ -37,6 +37,7 @@ body {
   min-height: 100vh;
   margin: 0;
   background-color: $color-body;
+  background-image: $body-bg-image;
   color: $color-text;
   font-family: Arial, sans-serif;
   font-size: $font-size-default;
@@ -117,7 +118,7 @@ ol {
 }
 
 h1 {
-  font-size: $font-size-lg;
+  font-size: 2em;
 }
 
 h2 {

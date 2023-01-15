@@ -26,7 +26,8 @@ module.exports = {
             additionalData: `
               @use 'sass:math';
               @use "../styles/index" as *;
-              @import "../styles/reset.scss";
+              @import "../../styles/native-variables.scss";
+              @import "../../styles/reset.scss";
             `,
           },
         },
