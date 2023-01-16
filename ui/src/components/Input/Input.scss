@@ -63,6 +63,8 @@ $input-height-without-border: $input-height - ($border-width * 2);
   white-space: nowrap;
 }
 
+// modifiers
+
 .ss-input--focus,
 .ss-input--active {
   .ss-input__label {

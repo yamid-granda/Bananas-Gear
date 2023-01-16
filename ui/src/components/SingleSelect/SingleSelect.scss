@@ -1,0 +1,50 @@
+.ss-single-select__options {
+  position: fixed;
+}
+
+.ss-single-select__options-wrap {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.ss-single-select__option {
+  position: relative;
+  display: flex;
+  min-height: $input-height;
+  align-items: center;
+  padding: 0 $input-padding;
+  border: $border-base;
+  background-color: $color-gray-9;
+  cursor: pointer;
+  transition: $transition-base;
+
+  &:first-child {
+    border-radius: $border-radius-base $border-radius-base 0 0;
+  }
+
+  &:last-child {
+    border-radius: 0 0 $border-radius-base $border-radius-base;
+  }
+
+  &:hover,
+  &:focus {
+    background-color: $color-white;
+  }
+}
+
+.ss-single-select__input {
+  position: absolute;
+  display: none;
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+// modifiers
+
+.ss-single-select__options--open {
+  .ss-single-select__options-wrap {
+    opacity: 1;
+    pointer-events: all;
+  }
+}
