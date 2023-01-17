@@ -1,7 +1,7 @@
-import type { KeyboardEvent } from 'react'
+import type { KeyboardEvent, MouseEvent } from 'react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import classNames from 'classnames'
-import type { InputRefs } from '@/components/Input/Input'
+import type { InputProps, InputRefs } from '@/components/Input/Input'
 import Input from '@/components/Input/Input'
 import type { HTMLInputEvent } from '@/ui/types'
 import './SingleSelect.scss'
@@ -12,10 +12,8 @@ export interface SingleSelectOption {
   text: string
 }
 
-export interface SingleSelectProps {
+export interface SingleSelectProps extends InputProps {
   options: SingleSelectOption[]
-  name: string
-  value: string
   onChange?: (value: string, event?: HTMLInputEvent) => void
 }
 
@@ -28,6 +26,7 @@ export default function SingleSelect(props: SingleSelectProps) {
   const [isMouseInOptions, setIsMouseInOptions] = useState<boolean>(false)
   const [focusedIndex, setFocusedIndex] = useState(0)
   const [searchRect, setSearchRect] = useState<Required<DOMRectInit>>({ height: 0, width: 0, x: 0, y: 0 })
+  const [isMounted, setIsMounted] = useState(false)
 
   // refs
 
@@ -82,7 +81,7 @@ export default function SingleSelect(props: SingleSelectProps) {
   // watchers
 
   useEffect(() => {
-    if (!isOpen)
+    if (isMounted && !isOpen)
       onClose()
   }, [isOpen])
 
@@ -116,10 +115,14 @@ export default function SingleSelect(props: SingleSelectProps) {
   function onSearchBlur(): void {
     if (!isMouseInOptions)
       close()
+
+    if (!selectedOption)
+      setSearchText('')
   }
 
-  function onSearchClick(): void {
+  function onSearchClick(event: MouseEvent<HTMLInputElement>): void {
     open()
+    props.onClick && props.onClick(event)
   }
 
   function onSearchKeyDown({ key }: KeyboardEvent<HTMLInputElement>): void {
@@ -144,7 +147,8 @@ export default function SingleSelect(props: SingleSelectProps) {
   }
 
   function onClose(): void {
-    setSearchText(selectedOption?.text || '')
+    if (selectedOption && searchText !== selectedOption.text)
+      setSearchText(selectedOption.text)
   }
 
   function onClickOutside() {
@@ -155,6 +159,7 @@ export default function SingleSelect(props: SingleSelectProps) {
   // methods
 
   function open(): void {
+    calculateSearchRect()
     setIsOpen(true)
   }
 
@@ -227,6 +232,7 @@ export default function SingleSelect(props: SingleSelectProps) {
 
     calculateSearchRect()
 
+    setIsMounted(true)
     return () => {
       window.removeEventListener('scroll', onScroll)
       document.removeEventListener('click', handleClickOutside, true)
@@ -270,6 +276,9 @@ export default function SingleSelect(props: SingleSelectProps) {
         ref={searchRef}
         value={searchText}
         name={`${props.name}-search`}
+        label={props.label}
+        message={props.message}
+        state={props.state}
         onInput={onSearch}
         onFocus={onSearchFocus}
         onBlur={onSearchBlur}

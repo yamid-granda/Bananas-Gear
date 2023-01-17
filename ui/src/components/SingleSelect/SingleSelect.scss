@@ -6,6 +6,8 @@
 
 .ss-single-select__options {
   position: fixed;
+  z-index: 1;
+  pointer-events: none;
 }
 
 .ss-single-select__options-wrap {

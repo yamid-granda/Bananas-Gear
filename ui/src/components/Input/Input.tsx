@@ -4,15 +4,7 @@ import './Input.scss'
 import classnames from 'classnames'
 import type { HTMLInputEvent, State } from '@/ui/types'
 
-type ReactInputProps = Omit<
-  Partial<DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>>,
-  | 'onInput'
-  | 'onFocus'
-  | 'onBlur'
-  | 'onClick'
->
-
-export interface InputProps extends ReactInputProps {
+export interface InputProps {
   value: string
   name: string
   label?: string

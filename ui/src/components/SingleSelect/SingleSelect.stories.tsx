@@ -20,12 +20,24 @@ const options: SingleSelectOption[] = [
 export const Default: ComponentStory<typeof SingleSelect> = () => {
   const [value, setValue] = useState('')
 
+  const options: SingleSelectOption[] = [
+    { value: 'rust', text: 'Rust' },
+    { value: 'go', text: 'Go' },
+    { value: 'typescript', text: 'Typescript' },
+    { value: 'haskell', text: 'Haskell' },
+    { value: 'javascript', text: 'Javascript' },
+  ]
+
+  function onChange(value: string) {
+    setValue(value)
+  }
+
   return (
     <SingleSelect
       value={value}
       options={options}
-      onChange={setValue}
-      name="Default"
+      onChange={onChange}
+      name="default"
     />
   )
 }
@@ -38,13 +50,72 @@ export const InitialValue: ComponentStory<typeof SingleSelect> = () => {
       value={value}
       options={options}
       onChange={setValue}
-      name="InitialValue"
+      name="initial-value"
+    />
+  )
+}
+
+export const Label: ComponentStory<typeof SingleSelect> = () => {
+  const [value, setValue] = useState('')
+
+  return (
+    <SingleSelect
+      value={value}
+      name="label"
+      label="Select label"
+      options={options}
+      onChange={setValue}
+    />
+  )
+}
+
+export const Message: ComponentStory<typeof SingleSelect> = () => {
+  const [value, setValue] = useState('')
+
+  return (
+    <SingleSelect
+      value={value}
+      name="message"
+      message="Input custom message"
+      options={options}
+      onChange={setValue}
+    />
+  )
+}
+
+export const ErrorState: ComponentStory<typeof SingleSelect> = () => {
+  const [value, setValue] = useState('')
+
+  return (
+    <SingleSelect
+      value={value}
+      label="Select label"
+      options={options}
+      name="error-state"
+      state="error"
+      onChange={setValue}
+    />
+  )
+}
+
+export const ErrorStateMessage: ComponentStory<typeof SingleSelect> = () => {
+  const [value, setValue] = useState('')
+
+  return (
+    <SingleSelect
+      value={value}
+      label="Select label"
+      message="Input custom message"
+      options={options}
+      name="error-state-message"
+      state="error"
+      onChange={setValue}
     />
   )
 }
 
 export const MuchOptions: ComponentStory<typeof SingleSelect> = () => {
-  const [value, setValue] = useState('typescript')
+  const [value, setValue] = useState('')
 
   const muchOptions = [
     { value: 'rust', text: 'Rust' },
@@ -73,7 +144,7 @@ export const MuchOptions: ComponentStory<typeof SingleSelect> = () => {
       value={value}
       options={muchOptions}
       onChange={setValue}
-      name="InitialValue"
+      name="initial-value"
     />
   )
 }
@@ -91,7 +162,7 @@ export const ScrollBehavior: ComponentStory<typeof SingleSelect> = () => {
         value={value}
         options={options}
         onChange={setValue}
-        name="ScrollBehavior"
+        name="scrollbehavior"
       />
       Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quas, dicta possimus laborum tempora aliquam dolorum, ex excepturi quisquam nostrum quidem iste aut iusto facilis est odio architecto, velit harum nemo amet explicabo! Repellendus quisquam, deserunt minus adipisci nihil dolores, dignissimos et eveniet sed vel, ut in blanditiis eum saepe! Sed quam officiis sint dolorum autem laborum fugit neque hic! Adipisci debitis exercitationem dignissimos nobis nesciunt consequatur maxime aut ullam? Quidem veritatis architecto deleniti officiis dolores facere. Magnam porro atque corporis enim velit officia ratione sequi, esse expedita, fugit dolores! Error eaque debitis harum ipsum dignissimos dolorem tempora quis culpa. Incidunt, quos, labore explicabo libero tempore cum amet saepe accusantium repellat pariatur illo! Provident repellat distinctio, qui omnis reprehenderit fugiat tempora facilis quidem sint, quas numquam officiis veritatis at, libero voluptatem obcaecati placeat culpa? Natus magnam, ipsa ipsum minus vero praesentium ratione beatae deleniti, mollitia ea dolor delectus enim suscipit fuga accusantium molestias consequuntur animi expedita? Et deleniti ad fugit esse nisi aliquam incidunt at est praesentium? Optio adipisci nesciunt iure, recusandae voluptates itaque nulla nisi a cum dignissimos? Rerum officia, nisi culpa, beatae distinctio asperiores mollitia dolorem consectetur explicabo sapiente iste laboriosam. Facilis, rerum! Ea soluta aut non possimus nostrum. Fugit, asperiores, inventore temporibus dolorem voluptatibus debitis, consectetur laborum provident corrupti accusantium perspiciatis harum. Aut quam quibusdam porro similique corrupti pariatur praesentium cumque odit recusandae dolore impedit, obcaecati nobis et voluptatibus autem aliquid cum debitis non ipsam aperiam aliquam repellat odio! Ea laudantium natus fugit temporibus itaque sapiente, cupiditate maxime maiores saepe, laboriosam, placeat quam quidem sint corrupti ipsa? Vitae fugiat, officia labore ratione iure blanditiis. Asperiores magnam quis, amet est repellat possimus quidem veniam tenetur a, esse molestiae sit reprehenderit debitis fugit sequi vitae hic accusamus temporibus eius nam et dolorum voluptates in! Officiis porro dolor deleniti sed ipsam voluptas sunt reprehenderit id illum non quisquam cum consectetur repudiandae, quod, ipsa facere vero excepturi delectus nisi ut voluptate architecto quibusdam, nihil optio. Velit non quod consequuntur consequatur sapiente ullam ex et obcaecati inventore voluptas id, debitis nemo natus nam fugit, iure pariatur voluptatibus. Quia ipsa explicabo tempora reprehenderit quis provident illum! Distinctio nemo numquam consequuntur voluptates culpa doloribus voluptatibus autem atque magnam obcaecati rerum temporibus quam, tempore facere reiciendis quis dignissimos odio porro harum quaerat id accusantium, voluptatum aut accusamus? Inventore quos quibusdam id. Impedit laudantium totam, minima tenetur obcaecati saepe, delectus placeat quas eligendi debitis aspernatur? Laboriosam, perferendis. Cum, quod. Est, ipsum animi iusto, consequatur veritatis minima soluta ratione debitis blanditiis corrupti excepturi voluptas repellendus eligendi, voluptate aliquam veniam. Nam praesentium nihil debitis quo natus itaque quos sunt ullam non quas, asperiores, libero, iure obcaecati sint. Inventore, ducimus. Cupiditate praesentium ullam perspiciatis culpa, dolore ut laborum. Facilis porro quasi quibusdam. Possimus, laudantium quasi quam tempora nisi exercitationem fugiat tenetur enim laborum praesentium fugit laboriosam unde voluptatum ut deleniti assumenda esse neque quod magnam numquam ex? Sapiente asperiores ipsam ratione, minus deserunt omnis quam quisquam autem quo aspernatur dolor quos recusandae odit maxime! Ipsam aperiam voluptatum quam voluptate tempore?
       Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quas, dicta possimus laborum tempora aliquam dolorum, ex excepturi quisquam nostrum quidem iste aut iusto facilis est odio architecto, velit harum nemo amet explicabo! Repellendus quisquam, deserunt minus adipisci nihil dolores, dignissimos et eveniet sed vel, ut in blanditiis eum saepe! Sed quam officiis sint dolorum autem laborum fugit neque hic! Adipisci debitis exercitationem dignissimos nobis nesciunt consequatur maxime aut ullam? Quidem veritatis architecto deleniti officiis dolores facere. Magnam porro atque corporis enim velit officia ratione sequi, esse expedita, fugit dolores! Error eaque debitis harum ipsum dignissimos dolorem tempora quis culpa. Incidunt, quos, labore explicabo libero tempore cum amet saepe accusantium repellat pariatur illo! Provident repellat distinctio, qui omnis reprehenderit fugiat tempora facilis quidem sint, quas numquam officiis veritatis at, libero voluptatem obcaecati placeat culpa? Natus magnam, ipsa ipsum minus vero praesentium ratione beatae deleniti, mollitia ea dolor delectus enim suscipit fuga accusantium molestias consequuntur animi expedita? Et deleniti ad fugit esse nisi aliquam incidunt at est praesentium? Optio adipisci nesciunt iure, recusandae voluptates itaque nulla nisi a cum dignissimos? Rerum officia, nisi culpa, beatae distinctio asperiores mollitia dolorem consectetur explicabo sapiente iste laboriosam. Facilis, rerum! Ea soluta aut non possimus nostrum. Fugit, asperiores, inventore temporibus dolorem voluptatibus debitis, consectetur laborum provident corrupti accusantium perspiciatis harum. Aut quam quibusdam porro similique corrupti pariatur praesentium cumque odit recusandae dolore impedit, obcaecati nobis et voluptatibus autem aliquid cum debitis non ipsam aperiam aliquam repellat odio! Ea laudantium natus fugit temporibus itaque sapiente, cupiditate maxime maiores saepe, laboriosam, placeat quam quidem sint corrupti ipsa? Vitae fugiat, officia labore ratione iure blanditiis. Asperiores magnam quis, amet est repellat possimus quidem veniam tenetur a, esse molestiae sit reprehenderit debitis fugit sequi vitae hic accusamus temporibus eius nam et dolorum voluptates in! Officiis porro dolor deleniti sed ipsam voluptas sunt reprehenderit id illum non quisquam cum consectetur repudiandae, quod, ipsa facere vero excepturi delectus nisi ut voluptate architecto quibusdam, nihil optio. Velit non quod consequuntur consequatur sapiente ullam ex et obcaecati inventore voluptas id, debitis nemo natus nam fugit, iure pariatur voluptatibus. Quia ipsa explicabo tempora reprehenderit quis provident illum! Distinctio nemo numquam consequuntur voluptates culpa doloribus voluptatibus autem atque magnam obcaecati rerum temporibus quam, tempore facere reiciendis quis dignissimos odio porro harum quaerat id accusantium, voluptatum aut accusamus? Inventore quos quibusdam id. Impedit laudantium totam, minima tenetur obcaecati saepe, delectus placeat quas eligendi debitis aspernatur? Laboriosam, perferendis. Cum, quod. Est, ipsum animi iusto, consequatur veritatis minima soluta ratione debitis blanditiis corrupti excepturi voluptas repellendus eligendi, voluptate aliquam veniam. Nam praesentium nihil debitis quo natus itaque quos sunt ullam non quas, asperiores, libero, iure obcaecati sint. Inventore, ducimus. Cupiditate praesentium ullam perspiciatis culpa, dolore ut laborum. Facilis porro quasi quibusdam. Possimus, laudantium quasi quam tempora nisi exercitationem fugiat tenetur enim laborum praesentium fugit laboriosam unde voluptatum ut deleniti assumenda esse neque quod magnam numquam ex? Sapiente asperiores ipsam ratione, minus deserunt omnis quam quisquam autem quo aspernatur dolor quos recusandae odit maxime! Ipsam aperiam voluptatum quam voluptate tempore?
