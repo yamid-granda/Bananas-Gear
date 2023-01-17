@@ -1,4 +1,4 @@
-@import './index.scss';
+@import './index';
 
 // -------------------------------------------------
 // + Base Reset Styles
@@ -37,7 +37,6 @@ body {
   min-height: 100vh;
   margin: 0;
   background-color: $color-body;
-  background-image: $body-bg-image;
   color: $color-text;
   font-family: Arial, sans-serif;
   font-size: $font-size-default;
@@ -45,7 +44,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   line-height: 1.35;
   scroll-behavior: smooth;
-  text-rendering: optimizeSpeed;
+  text-rendering: optimizespeed;
 }
 
 // -------------------------------------------------

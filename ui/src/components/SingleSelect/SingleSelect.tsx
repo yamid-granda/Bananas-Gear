@@ -16,24 +16,30 @@ export interface SingleSelectProps {
   options: SingleSelectOption[]
   name: string
   value: string
-  onChange?: (value: string, event: HTMLInputEvent) => void
+  onChange?: (value: string, event?: HTMLInputEvent) => void
 }
 
 export default function SingleSelect(props: SingleSelectProps) {
   // data
 
-  const [selectedOption, setSelectedOption] = useState<SingleSelectOption | null>(null)
   const [searchText, setSearchText] = useState('')
   const [isSearching, setIsSearching] = useState(false)
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [isMouseInOptions, setIsMouseInOptions] = useState<boolean>(false)
+  const [focusedIndex, setFocusedIndex] = useState(0)
   const [searchRect, setSearchRect] = useState<Required<DOMRectInit>>({ height: 0, width: 0, x: 0, y: 0 })
 
   // refs
 
+  const ref = useRef<HTMLDivElement>(null)
   const searchRef = useRef<InputRefs>(null)
 
   // computed
+
+  const selectedOption = useMemo(
+    () => props.options.find(option => option.value === props.value) || null,
+    [props.value],
+  )
 
   const optionsClasses = useMemo(() => {
     return classNames({
@@ -69,6 +75,10 @@ export default function SingleSelect(props: SingleSelectProps) {
     }
   }, [searchRect])
 
+  const filteredOptionsCount = useMemo<number>(() => {
+    return filteredOptions.length
+  }, [filteredOptions.length])
+
   // watchers
 
   useEffect(() => {
@@ -76,11 +86,13 @@ export default function SingleSelect(props: SingleSelectProps) {
       onClose()
   }, [isOpen])
 
+  useEffect(() => {
+    setFocusedIndex(0)
+  }, [filteredOptionsCount])
+
   // events
 
-  function onChange(option: SingleSelectOption, event: HTMLInputEvent): void {
-    setIsSearching(false)
-    setSelectedOption(option)
+  function onChange(option: SingleSelectOption, event?: HTMLInputEvent): void {
     setSearchText(option.text)
     searchRef.current?.inputRef.current?.focus()
     close()
@@ -110,13 +122,12 @@ export default function SingleSelect(props: SingleSelectProps) {
     open()
   }
 
-  function onSearchKeyDown(event: KeyboardEvent<HTMLInputElement>): void {
-    if (event.key === 'Tab') {
-      close()
-      return
-    }
+  function onSearchKeyDown({ key }: KeyboardEvent<HTMLInputElement>): void {
+    toggleOpenByArrowKey(key)
+    moveFocusedIndexByArrowKey(key)
+    changeByArrowKey(key)
 
-    if (!isSearching)
+    if (!isSearching && key.length === 1)
       setSearchText('')
   }
 
@@ -136,6 +147,11 @@ export default function SingleSelect(props: SingleSelectProps) {
     setSearchText(selectedOption?.text || '')
   }
 
+  function onClickOutside() {
+    if (isOpen)
+      close()
+  }
+
   // methods
 
   function open(): void {
@@ -143,8 +159,8 @@ export default function SingleSelect(props: SingleSelectProps) {
   }
 
   function close(): void {
-    setIsSearching(false)
     setIsOpen(false)
+    setIsSearching(false)
   }
 
   function calculateSearchRect(): void {
@@ -157,25 +173,73 @@ export default function SingleSelect(props: SingleSelectProps) {
     setSearchRect(rect)
   }
 
+  function getOptionClasses(index: number): string {
+    return classNames({
+      'ss-single-select__option': true,
+      'ss-single-select__option--focused': focusedIndex === index,
+    })
+  }
+
+  function moveFocusedIndexByArrowKey(key: string): void {
+    if (!isOpen)
+      return
+
+    if (key === 'ArrowDown' && focusedIndex < filteredOptions.length - 1)
+      setFocusedIndex(() => focusedIndex + 1)
+
+    if (key === 'ArrowUp' && focusedIndex > 0)
+      setFocusedIndex(() => focusedIndex - 1)
+  }
+
+  function toggleOpenByArrowKey(key: string): void {
+    if (isOpen) {
+      if (['Tab', 'Escape'].includes(key))
+        close()
+
+      return
+    }
+
+    if (['Enter', 'ArrowDown'].includes(key))
+      open()
+  }
+
+  function changeByArrowKey(key: string): void {
+    if (isOpen && key === 'Enter') {
+      const option = filteredOptions[focusedIndex]
+      onChange(option)
+    }
+  }
+
+  function handleClickOutside(event: Event) {
+    if (ref.current && !ref.current.contains(event.target as Node))
+      onClickOutside()
+  }
+
   // life cycle
 
   useEffect(() => {
     window.removeEventListener('scroll', onScroll)
     window.addEventListener('scroll', onScroll, { passive: true })
+    document.addEventListener('click', handleClickOutside, true)
+
+    const initialText = selectedOption?.text || ''
+    setSearchText(initialText)
+
     calculateSearchRect()
 
     return () => {
       window.removeEventListener('scroll', onScroll)
+      document.removeEventListener('click', handleClickOutside, true)
     }
   }, [])
 
   // templates
 
   const optionsTemplate = useMemo(() => {
-    return filteredOptions.map((option) => {
+    return filteredOptions.map((option, index) => {
       return (
         <label
-          className="ss-single-select__option"
+          className={getOptionClasses(index)}
           key={option.value}
           onClick={onOptionClick}
         >
@@ -185,6 +249,7 @@ export default function SingleSelect(props: SingleSelectProps) {
             name={props.name}
             value={option.value}
             onChange={(event: HTMLInputEvent) => onChange(option, event)}
+            checked={option.value === props.value}
           />
 
           <span className="ss-single-select__option--text">
@@ -193,11 +258,14 @@ export default function SingleSelect(props: SingleSelectProps) {
         </label>
       )
     })
-  }, [filteredOptions])
+  }, [filteredOptions, focusedIndex])
 
   return (
-    <div className="ss-single-select">
-      {JSON.stringify(selectedOption)}
+    <div
+      className="ss-single-select"
+      ref={ref}
+    >
+      {/* Search */}
       <Input
         ref={searchRef}
         value={searchText}
@@ -209,6 +277,7 @@ export default function SingleSelect(props: SingleSelectProps) {
         onKeyDown={onSearchKeyDown}
       />
 
+      {/* Options */}
       <Portal>
         <div
           className={optionsClasses}

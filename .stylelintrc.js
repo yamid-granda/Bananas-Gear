@@ -3,7 +3,6 @@ module.exports = {
     'stylelint-config-standard',
     'stylelint-config-standard-scss',
     'stylelint-config-idiomatic-order',
-    'stylelint-config-recommended',
   ],
   plugins: [
     'stylelint-order',

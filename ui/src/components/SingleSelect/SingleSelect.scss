@@ -1,8 +1,17 @@
+@mixin highlight-option {
+  border-color: $color-primary;
+  border-radius: $border-radius-base;
+  background-color: $color-primary-light;
+}
+
 .ss-single-select__options {
   position: fixed;
 }
 
 .ss-single-select__options-wrap {
+  overflow: auto;
+  max-height: 50vh;
+  border-radius: $border-radius-base;
   opacity: 0;
   pointer-events: none;
 }
@@ -19,16 +28,18 @@
   transition: $transition-base;
 
   &:first-child {
-    border-radius: $border-radius-base $border-radius-base 0 0;
+    border-top-left-radius: $border-radius-base;
+    border-top-right-radius: $border-radius-base;
   }
 
   &:last-child {
-    border-radius: 0 0 $border-radius-base $border-radius-base;
+    border-bottom-left-radius: $border-radius-base;
+    border-bottom-right-radius: $border-radius-base;
   }
 
   &:hover,
   &:focus {
-    background-color: $color-white;
+    @include highlight-option;
   }
 }
 
@@ -47,4 +58,8 @@
     opacity: 1;
     pointer-events: all;
   }
+}
+
+.ss-single-select__option--focused {
+  @include highlight-option;
 }

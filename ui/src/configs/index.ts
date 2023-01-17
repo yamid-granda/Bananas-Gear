@@ -1,1 +1,1 @@
-// export 
+export const TRANSITION_DURATION = 125

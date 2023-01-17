@@ -26,7 +26,7 @@ export interface InputProps extends ReactInputProps {
 }
 
 export interface InputRefs {
-  ref: RefObject<HTMLInputElement>
+  ref: RefObject<HTMLDivElement>
   inputRef: RefObject<HTMLInputElement>
 }
 
@@ -37,7 +37,7 @@ const Input = forwardRef<InputRefs, InputProps>((props, forwardedRef) => {
 
   // refs
 
-  const ref = useRef<HTMLInputElement>(null)
+  const ref = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
   // computed
