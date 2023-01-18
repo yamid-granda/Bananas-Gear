@@ -32,6 +32,8 @@ export default function SingleSelect(props: SingleSelectProps) {
 
   const ref = useRef<HTMLDivElement>(null)
   const searchRef = useRef<InputRefs>(null)
+  const optionsRefs = useRef<HTMLLabelElement[]>([])
+  const optionsContainerRef = useRef<HTMLDivElement>(null)
 
   // computed
 
@@ -88,6 +90,13 @@ export default function SingleSelect(props: SingleSelectProps) {
   useEffect(() => {
     setFocusedIndex(0)
   }, [filteredOptionsCount])
+
+  useEffect(() => {
+    if (!isMounted)
+      return
+
+    onChangeFocusedOption()
+  }, [focusedIndex])
 
   // events
 
@@ -154,6 +163,15 @@ export default function SingleSelect(props: SingleSelectProps) {
   function onClickOutside() {
     if (isOpen)
       close()
+  }
+
+  function onChangeFocusedOption() {
+    const option = optionsRefs.current[focusedIndex]
+
+    if (!option)
+      return
+
+    option.scrollIntoView({ block: 'nearest' })
   }
 
   // methods
@@ -247,6 +265,7 @@ export default function SingleSelect(props: SingleSelectProps) {
         <label
           className={getOptionClasses(index)}
           key={option.value}
+          ref={(el: HTMLLabelElement) => optionsRefs.current[index] = el}
           onClick={onOptionClick}
         >
           <input
@@ -298,7 +317,10 @@ export default function SingleSelect(props: SingleSelectProps) {
           onMouseEnter={onMouseEnterInOptions}
           onMouseLeave={onMouseLeaveFromOptions}
         >
-          <div className="ss-single-select__options-wrap">
+          <div
+            className="ss-single-select__options-wrap"
+            ref={optionsContainerRef}
+          >
             {optionsTemplate}
           </div>
         </div>
