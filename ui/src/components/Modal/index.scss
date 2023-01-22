@@ -23,7 +23,14 @@
   bottom: 0;
   left: 0;
   background-color: $color-gray-0;
-  opacity: 0.5;
+  cursor: pointer;
+  opacity: $opacity-hide;
+  transition: $transition-base;
+  transition-duration: 1s;
+
+  &:hover {
+    opacity: $opacity-light;
+  }
 }
 
 .ss-modal__content {

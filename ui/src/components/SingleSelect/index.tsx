@@ -174,7 +174,11 @@ export default function SingleSelect(props: SingleSelectProps) {
     props.onClick && props.onClick(event)
   }
 
-  function onSearchKeyDown({ key }: KeyboardEvent<HTMLInputElement>): void {
+  function onSearchKeyDown(event: KeyboardEvent<HTMLInputElement>): void {
+    if (isOpen)
+      event.stopPropagation()
+
+    const { key } = event
     toggleOpenByArrowKey(key)
     moveFocusedIndexByArrowKey(key)
     changeByArrowKey(key)
@@ -196,24 +200,13 @@ export default function SingleSelect(props: SingleSelectProps) {
   }
 
   function onClose(): void {
-    if (selectedOption && searchText !== selectedOption.text)
-      setSearchText(selectedOption.text)
-
-    scrollableParents.forEach(parent => parent.removeEventListener('scroll', onScroll))
-    setScrollableParents([])
+    setSelectedOptionText()
+    unListenScrollableParents()
   }
 
   function onOpen(): void {
     calculateSearchRect()
-
-    const element = ref.current
-
-    if (!element)
-      return
-
-    const scrollableParents = getScrollableParents(element)
-    setScrollableParents(scrollableParents)
-    scrollableParents.forEach(parent => parent.addEventListener('scroll', onScroll, { passive: true }))
+    listenScrollableParents()
   }
 
   function onClickOutside() {
@@ -303,6 +296,29 @@ export default function SingleSelect(props: SingleSelectProps) {
   function handleClickOutside(event: Event) {
     if (ref.current && !ref.current.contains(event.target as Node))
       onClickOutside()
+  }
+
+  function listenScrollableParents(): void {
+    const element = ref.current
+
+    if (!element)
+      return
+
+    const scrollableParents = getScrollableParents(element)
+    setScrollableParents(scrollableParents)
+    scrollableParents.forEach(parent => parent.addEventListener('scroll', onScroll, { passive: true }))
+  }
+
+  function unListenScrollableParents(): void {
+    scrollableParents.forEach(parent => parent.removeEventListener('scroll', onScroll))
+    setScrollableParents([])
+  }
+
+  function setSelectedOptionText(): void {
+    const requiresSetSelectedOptionText = selectedOption && searchText !== selectedOption.text
+
+    if (requiresSetSelectedOptionText)
+      setSearchText(selectedOption.text)
   }
 
   // life cycle
