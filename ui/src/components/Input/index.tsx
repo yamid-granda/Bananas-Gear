@@ -1,6 +1,6 @@
 import type { KeyboardEvent, MouseEvent, RefObject } from 'react'
 import { forwardRef, useImperativeHandle, useMemo, useRef, useState } from 'react'
-import './Input.scss'
+import './index.scss'
 import classnames from 'classnames'
 import type { HTMLInputEvent, State } from '@/ui/types'
 

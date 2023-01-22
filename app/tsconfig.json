@@ -18,7 +18,6 @@
     "paths": {
       "@/app/*": ["./src/*"],
       "@/ui/*": ["../ui/*"],
-      "@/components/*": ["../ui/src/components/*"],
     }
   },
   "include": ["src"],

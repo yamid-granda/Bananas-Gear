@@ -1,8 +1,8 @@
 import type { KeyboardEvent, MouseEvent } from 'react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import classNames from 'classnames'
-import type { InputProps, InputRefs } from '@/components/Input/Input'
-import Input from '@/components/Input/Input'
+import type { InputProps, InputRefs } from '@/ui/components/Input'
+import Input from '@/ui/components/Input'
 import type { HTMLInputEvent } from '@/ui/types'
 import './index.scss'
 import Portal from '@/ui/components/Portal'
@@ -13,7 +13,10 @@ export interface SingleSelectOption {
   text: string
 }
 
-export interface SingleSelectProps extends InputProps {
+export type SingleSelectValue = string | null
+
+export interface SingleSelectProps extends Omit<InputProps, 'value'> {
+  value: string | null
   options: SingleSelectOption[]
   onChange?: (value: string, event?: HTMLInputEvent) => void
 }
@@ -28,6 +31,7 @@ export default function SingleSelect(props: SingleSelectProps) {
   const [focusedIndex, setFocusedIndex] = useState(0)
   const [searchRect, setSearchRect] = useState<Required<DOMRectInit>>({ height: 0, width: 0, x: 0, y: 0 })
   const [isOptionsContainerInTop, setIsOptionsContainerInTop] = useState(false)
+  const [scrollableParents, setScrollableParents] = useState<Element[]>([])
   const [isMounted, setIsMounted] = useState(false)
 
   // refs
@@ -195,13 +199,8 @@ export default function SingleSelect(props: SingleSelectProps) {
     if (selectedOption && searchText !== selectedOption.text)
       setSearchText(selectedOption.text)
 
-    const element = ref.current
-
-    if (!element)
-      return
-
-    const scrollableParents = getScrollableParents(element)
     scrollableParents.forEach(parent => parent.removeEventListener('scroll', onScroll))
+    setScrollableParents([])
   }
 
   function onOpen(): void {
@@ -213,6 +212,7 @@ export default function SingleSelect(props: SingleSelectProps) {
       return
 
     const scrollableParents = getScrollableParents(element)
+    setScrollableParents(scrollableParents)
     scrollableParents.forEach(parent => parent.addEventListener('scroll', onScroll, { passive: true }))
   }
 

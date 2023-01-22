@@ -1,5 +1,5 @@
 import type { PropsWithChildren } from 'react'
-import './FormItem.scss'
+import './index.scss'
 
 export default function FormItem(props: PropsWithChildren) {
   return (

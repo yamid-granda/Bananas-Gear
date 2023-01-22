@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import type { ComponentMeta, ComponentStory } from '@storybook/react'
 
-import Input from './Input'
-import FormItem from '@/ui/components/FormItem/FormItem'
+import Input from '.'
+import FormItem from '@/ui/components/FormItem'
 
 export default {
   title: 'Input',

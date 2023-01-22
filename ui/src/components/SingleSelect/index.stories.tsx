@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import type { ComponentMeta, ComponentStory } from '@storybook/react'
 
-import type { SingleSelectOption } from '.'
+import type { SingleSelectOption, SingleSelectValue } from '.'
 import SingleSelect from '.'
-import Button from '@/components/Button'
-import Modal from '@/components/Modal'
+import Button from '@/ui/components/Button'
+import Modal from '@/ui/components/Modal'
 
 export default {
   title: 'Single Select',
@@ -20,7 +20,7 @@ const options: SingleSelectOption[] = [
 ]
 
 export const Default: ComponentStory<typeof SingleSelect> = () => {
-  const [value, setValue] = useState('')
+  const [value, setValue] = useState<SingleSelectValue>(null)
 
   const options: SingleSelectOption[] = [
     { value: 'rust', text: 'Rust' },
@@ -59,7 +59,7 @@ export const InitialValue: ComponentStory<typeof SingleSelect> = () => {
 }
 
 export const Message: ComponentStory<typeof SingleSelect> = () => {
-  const [value, setValue] = useState('')
+  const [value, setValue] = useState<SingleSelectValue>(null)
 
   return (
     <SingleSelect
@@ -73,7 +73,7 @@ export const Message: ComponentStory<typeof SingleSelect> = () => {
 }
 
 export const ErrorState: ComponentStory<typeof SingleSelect> = () => {
-  const [value, setValue] = useState('')
+  const [value, setValue] = useState<SingleSelectValue>(null)
 
   return (
     <SingleSelect
@@ -88,7 +88,7 @@ export const ErrorState: ComponentStory<typeof SingleSelect> = () => {
 }
 
 export const ErrorStateMessage: ComponentStory<typeof SingleSelect> = () => {
-  const [value, setValue] = useState('')
+  const [value, setValue] = useState<SingleSelectValue>(null)
 
   return (
     <SingleSelect
@@ -104,7 +104,7 @@ export const ErrorStateMessage: ComponentStory<typeof SingleSelect> = () => {
 }
 
 export const MuchOptions: ComponentStory<typeof SingleSelect> = () => {
-  const [value, setValue] = useState('')
+  const [value, setValue] = useState<SingleSelectValue>(null)
 
   const muchOptions = [
     { value: 'rust', text: 'Rust' },
@@ -139,7 +139,7 @@ export const MuchOptions: ComponentStory<typeof SingleSelect> = () => {
 }
 
 export const ScrollBehavior: ComponentStory<typeof SingleSelect> = () => {
-  const [value, setValue] = useState('')
+  const [value, setValue] = useState<SingleSelectValue>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   return (
