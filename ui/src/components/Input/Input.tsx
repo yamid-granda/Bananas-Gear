@@ -1,4 +1,4 @@
-import type { DetailedHTMLProps, InputHTMLAttributes, MouseEvent, RefObject, KeyboardEvent } from 'react'
+import type { KeyboardEvent, MouseEvent, RefObject } from 'react'
 import { forwardRef, useImperativeHandle, useMemo, useRef, useState } from 'react'
 import './Input.scss'
 import classnames from 'classnames'

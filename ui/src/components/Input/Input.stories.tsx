@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import type { ComponentMeta, ComponentStory } from '@storybook/react'
 
 import Input from './Input'
@@ -16,6 +16,7 @@ export const Default: ComponentStory<typeof Input> = () => {
     <Input
       value={value}
       name="Default"
+      label='Input label'
       onInput={setValue}
     />
   )
@@ -28,19 +29,6 @@ export const InitialValue: ComponentStory<typeof Input> = () => {
     <Input
       value={value}
       name="InitialValue"
-      onInput={setValue}
-    />
-  )
-}
-
-export const Label: ComponentStory<typeof Input> = () => {
-  const [value, setValue] = useState('')
-
-  return (
-    <Input
-      value={value}
-      name="Label"
-      label="Label text"
       onInput={setValue}
     />
   )

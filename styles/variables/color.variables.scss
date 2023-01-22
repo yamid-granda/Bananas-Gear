@@ -71,16 +71,24 @@ $color-green-1: var(--color-green-1);
 $color-green-0: var(--color-green-0);
 
 // -------------------------------------------------
+// + Paper
+// -------------------------------------------------
+
+$color-paper-1: $color-white;
+$color-paper-2: $color-gray-9;
+$color-paper-3: $color-gray-8;
+
+// -------------------------------------------------
 // + Base
 // -------------------------------------------------
 
-$color-hover: $color-gray-9;
+$color-hover: $color-paper-2;
 $color-primary: $color-teal-2;
 $color-primary-hover: $color-teal-4;
 $color-primary-active: $color-teal-4;
 $color-primary-light: $color-teal-9;
 $color-primary-light-hover: $color-teal-8;
-$color-secondary: $color-gray-9;
+$color-secondary: $color-paper-2;
 $color-secondary-hover: $color-white;
 $color-danger: $color-red-2;
 $color-danger-hover: $color-red-4;
@@ -128,6 +136,6 @@ $color-input-background: $color-white;
 // + Button Secondary
 // -------------------------------------------------
 
-$c-btn-secondary: $color-gray-9;
+$c-btn-secondary: $color-paper-2;
 $c-btn-secondary-hover: $color-white;
 $c-btn-secondary-text: $color-text;

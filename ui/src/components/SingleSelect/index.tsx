@@ -4,8 +4,9 @@ import classNames from 'classnames'
 import type { InputProps, InputRefs } from '@/components/Input/Input'
 import Input from '@/components/Input/Input'
 import type { HTMLInputEvent } from '@/ui/types'
-import './SingleSelect.scss'
-import Portal from '@/components/Portal/Portal'
+import './index.scss'
+import Portal from '@/ui/components/Portal'
+import { getScrollableParents } from '@/ui/utils/getScrollableParents'
 
 export interface SingleSelectOption {
   value: string
@@ -26,6 +27,7 @@ export default function SingleSelect(props: SingleSelectProps) {
   const [isMouseInOptions, setIsMouseInOptions] = useState<boolean>(false)
   const [focusedIndex, setFocusedIndex] = useState(0)
   const [searchRect, setSearchRect] = useState<Required<DOMRectInit>>({ height: 0, width: 0, x: 0, y: 0 })
+  const [isOptionsContainerInTop, setIsOptionsContainerInTop] = useState(false)
   const [isMounted, setIsMounted] = useState(false)
 
   // refs
@@ -34,6 +36,7 @@ export default function SingleSelect(props: SingleSelectProps) {
   const searchRef = useRef<InputRefs>(null)
   const optionsRefs = useRef<HTMLLabelElement[]>([])
   const optionsContainerRef = useRef<HTMLDivElement>(null)
+  const optionsWrapRef = useRef<HTMLDivElement>(null)
 
   // computed
 
@@ -42,12 +45,19 @@ export default function SingleSelect(props: SingleSelectProps) {
     [props.value],
   )
 
-  const optionsClasses = useMemo(() => {
+  const optionsContainerClasses = useMemo(() => {
     return classNames({
       'ss-single-select__options': true,
       'ss-single-select__options--open': isOpen,
     })
-  }, [isOpen])
+  }, [isOpen, isOptionsContainerInTop])
+
+  const optionsWrapClasses = useMemo(() => {
+    return classNames({
+      'ss-single-select__options-wrap': true,
+      'ss-single-select__options-wrap--top': isOptionsContainerInTop,
+    })
+  }, [isOptionsContainerInTop])
 
   const filteredOptions = useMemo<SingleSelectOption[]>(() => {
     if (!isSearching)
@@ -64,7 +74,7 @@ export default function SingleSelect(props: SingleSelectProps) {
     props.options,
   ])
 
-  const optionsStyle = useMemo(() => {
+  const optionsContainerStyles = useMemo(() => {
     const { x, y, width, height } = searchRect
     const top = y + height
     const left = x
@@ -73,18 +83,19 @@ export default function SingleSelect(props: SingleSelectProps) {
       width: `${width}px`,
       top: `${top}px`,
       left: `${left}px`,
+      transform: 'translateY(-100%)',
     }
   }, [searchRect])
 
-  const filteredOptionsCount = useMemo<number>(() => {
-    return filteredOptions.length
-  }, [filteredOptions.length])
+  const filteredOptionsCount = useMemo<number>(() => filteredOptions.length, [filteredOptions.length])
 
   // watchers
 
   useEffect(() => {
-    if (isMounted && !isOpen)
-      onClose()
+    if (!isMounted)
+      return
+
+    isOpen ? onOpen() : onClose()
   }, [isOpen])
 
   useEffect(() => {
@@ -97,6 +108,16 @@ export default function SingleSelect(props: SingleSelectProps) {
 
     onChangeFocusedOption()
   }, [focusedIndex])
+
+  useEffect(() => {
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onResize, { passive: true })
+
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onResize)
+    }
+  }, [isOpen])
 
   // events
 
@@ -114,6 +135,21 @@ export default function SingleSelect(props: SingleSelectProps) {
   }
 
   function onScroll(): void {
+    calculateSearchRect()
+
+    if (!isOpen)
+      return
+
+    const optionsContainer = optionsContainerRef.current
+
+    if (!optionsContainer)
+      return
+
+    const isContainerOutScreen: boolean = optionsContainer.getBoundingClientRect().bottom > window.innerHeight
+    setIsOptionsContainerInTop(isContainerOutScreen)
+  }
+
+  function onResize(): void {
     calculateSearchRect()
   }
 
@@ -158,6 +194,26 @@ export default function SingleSelect(props: SingleSelectProps) {
   function onClose(): void {
     if (selectedOption && searchText !== selectedOption.text)
       setSearchText(selectedOption.text)
+
+    const element = ref.current
+
+    if (!element)
+      return
+
+    const scrollableParents = getScrollableParents(element)
+    scrollableParents.forEach(parent => parent.removeEventListener('scroll', onScroll))
+  }
+
+  function onOpen(): void {
+    calculateSearchRect()
+
+    const element = ref.current
+
+    if (!element)
+      return
+
+    const scrollableParents = getScrollableParents(element)
+    scrollableParents.forEach(parent => parent.addEventListener('scroll', onScroll, { passive: true }))
   }
 
   function onClickOutside() {
@@ -174,10 +230,21 @@ export default function SingleSelect(props: SingleSelectProps) {
     option.scrollIntoView({ block: 'nearest' })
   }
 
+  function onMounted(): void {
+    document.addEventListener('click', handleClickOutside, true)
+
+    setSearchText(selectedOption?.text || '')
+    calculateSearchRect()
+    setIsMounted(true)
+  }
+
+  function beforeUnmount(): void {
+    document.removeEventListener('click', handleClickOutside, true)
+  }
+
   // methods
 
   function open(): void {
-    calculateSearchRect()
     setIsOpen(true)
   }
 
@@ -241,19 +308,10 @@ export default function SingleSelect(props: SingleSelectProps) {
   // life cycle
 
   useEffect(() => {
-    window.removeEventListener('scroll', onScroll)
-    window.addEventListener('scroll', onScroll, { passive: true })
-    document.addEventListener('click', handleClickOutside, true)
+    onMounted()
 
-    const initialText = selectedOption?.text || ''
-    setSearchText(initialText)
-
-    calculateSearchRect()
-
-    setIsMounted(true)
     return () => {
-      window.removeEventListener('scroll', onScroll)
-      document.removeEventListener('click', handleClickOutside, true)
+      beforeUnmount()
     }
   }, [])
 
@@ -308,18 +366,19 @@ export default function SingleSelect(props: SingleSelectProps) {
       {/* Options */}
       <Portal>
         <div
-          className={optionsClasses}
+          ref={optionsContainerRef}
+          className={optionsContainerClasses}
           style={{
-            top: optionsStyle.top,
-            left: optionsStyle.left,
-            width: optionsStyle.width,
+            top: optionsContainerStyles.top,
+            left: optionsContainerStyles.left,
+            width: optionsContainerStyles.width,
           }}
           onMouseEnter={onMouseEnterInOptions}
           onMouseLeave={onMouseLeaveFromOptions}
         >
           <div
-            className="ss-single-select__options-wrap"
-            ref={optionsContainerRef}
+            className={optionsWrapClasses}
+            ref={optionsWrapRef}
           >
             {optionsTemplate}
           </div>

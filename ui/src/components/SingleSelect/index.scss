@@ -6,7 +6,7 @@
 
 .ss-single-select__options {
   position: fixed;
-  z-index: 1;
+  z-index: $z-index-popover;
   pointer-events: none;
 }
 
@@ -25,7 +25,7 @@
   align-items: center;
   padding: 0 $input-padding;
   border: $border-base;
-  background-color: $color-gray-9;
+  background-color: $color-paper-2;
   cursor: pointer;
   transition: $transition-base;
 
@@ -60,6 +60,10 @@
     opacity: 1;
     pointer-events: all;
   }
+}
+
+.ss-single-select__options-wrap--top {
+  transform: translateY(calc(-100% - $input-height));
 }
 
 .ss-single-select__option--focused {

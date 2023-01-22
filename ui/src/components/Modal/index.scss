@@ -1,0 +1,52 @@
+.ss-modal {
+  position: fixed;
+  z-index: $z-index-modal;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  width: 100%;
+  align-items: flex-start;
+  justify-content: center;
+  padding: $gutter-page;
+  opacity: 0;
+  pointer-events: none;
+  transition: $transition-base;
+}
+
+.ss-modal__overlay {
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: $color-gray-0;
+  opacity: 0.5;
+}
+
+.ss-modal__content {
+  overflow: auto;
+  max-width: $width-tablet;
+  max-height: 100%;
+  padding: $spacing-8;
+  border: $border-base;
+  border-radius: $border-radius-base;
+  background-color: $color-paper-3;
+}
+
+.ss-modal--open {
+  opacity: 1;
+  pointer-events: all;
+}
+
+@include lg {
+  .ss-modal {
+    padding: $gutter-page-lg;
+  }
+
+  .ss-modal__content {
+    padding: $input-height;
+  }
+}
