@@ -1,5 +1,5 @@
-import type { KeyboardEvent, MouseEvent } from 'react'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import type { KeyboardEvent, MouseEvent, Reducer } from 'react'
+import { useEffect, useMemo, useReducer, useRef, useState } from 'react'
 import classNames from 'classnames'
 import type { InputProps, InputRefs } from '@/ui/components/Input'
 import Input from '@/ui/components/Input'
@@ -24,15 +24,19 @@ export interface SingleSelectProps extends Omit<InputProps, 'value'> {
 export default function SingleSelect(props: SingleSelectProps) {
   // data
 
-  const [searchText, setSearchText] = useState('')
   const [isSearching, setIsSearching] = useState(false)
   const [isOpen, setIsOpen] = useState<boolean>(false)
-  const [isMouseInOptions, setIsMouseInOptions] = useState<boolean>(false)
   const [focusedIndex, setFocusedIndex] = useState(0)
   const [searchRect, setSearchRect] = useState<Required<DOMRectInit>>({ height: 0, width: 0, x: 0, y: 0 })
   const [isOptionsContainerInTop, setIsOptionsContainerInTop] = useState(false)
   const [scrollableParents, setScrollableParents] = useState<Element[]>([])
   const [isMounted, setIsMounted] = useState(false)
+  const [prevSearch, setPrevSearch] = useState('')
+
+  const [searchText, setSearchText] = useReducer<Reducer<string, string>>((prev, next) => {
+    setPrevSearch(prev)
+    return next
+  }, props.value || '')
 
   // refs
 
@@ -96,13 +100,6 @@ export default function SingleSelect(props: SingleSelectProps) {
   // watchers
 
   useEffect(() => {
-    if (!isMounted)
-      return
-
-    isOpen ? onOpen() : onClose()
-  }, [isOpen])
-
-  useEffect(() => {
     setFocusedIndex(0)
   }, [filteredOptionsCount])
 
@@ -114,14 +111,26 @@ export default function SingleSelect(props: SingleSelectProps) {
   }, [focusedIndex])
 
   useEffect(() => {
+    if (isMounted)
+      isOpen ? onOpen() : onClose()
+
     window.addEventListener('scroll', onScroll, { passive: true })
     window.addEventListener('resize', onResize, { passive: true })
+    document.addEventListener('click', handleClickOutside, true)
+
+    if (!isOpen && !selectedOption)
+      setSearchText('')
 
     return () => {
       window.removeEventListener('scroll', onScroll)
       window.removeEventListener('resize', onResize)
+      document.removeEventListener('click', handleClickOutside, true)
     }
   }, [isOpen])
+
+  // useEffect((param) => {
+  //   if(!isSearching)
+  // }, [isSearching, searchText])
 
   // events
 
@@ -161,14 +170,6 @@ export default function SingleSelect(props: SingleSelectProps) {
     open()
   }
 
-  function onSearchBlur(): void {
-    if (!isMouseInOptions)
-      close()
-
-    if (!selectedOption)
-      setSearchText('')
-  }
-
   function onSearchClick(event: MouseEvent<HTMLInputElement>): void {
     open()
     props.onClick && props.onClick(event)
@@ -185,14 +186,10 @@ export default function SingleSelect(props: SingleSelectProps) {
 
     if (!isSearching && key.length === 1)
       setSearchText('')
-  }
 
-  function onMouseEnterInOptions(): void {
-    setIsMouseInOptions(true)
-  }
-
-  function onMouseLeaveFromOptions(): void {
-    setIsMouseInOptions(false)
+    // android keyboard support
+    else if (key === 'Unidentified' && !isSearching && searchText !== prevSearch)
+      setSearchText('')
   }
 
   function onOptionClick(): void {
@@ -224,8 +221,6 @@ export default function SingleSelect(props: SingleSelectProps) {
   }
 
   function onMounted(): void {
-    document.addEventListener('click', handleClickOutside, true)
-
     setSearchText(selectedOption?.text || '')
     calculateSearchRect()
     setIsMounted(true)
@@ -294,7 +289,17 @@ export default function SingleSelect(props: SingleSelectProps) {
   }
 
   function handleClickOutside(event: Event) {
-    if (ref.current && !ref.current.contains(event.target as Node))
+    const target = event.target as Node
+    const searchElement = ref.current
+    const optionsElement = optionsContainerRef.current
+    const hasElements = searchElement && optionsElement
+
+    if (!hasElements)
+      return
+
+    const isClickOut = !(searchElement.contains(target) || optionsElement.contains(target))
+
+    if (isClickOut)
       onClickOutside()
   }
 
@@ -374,7 +379,6 @@ export default function SingleSelect(props: SingleSelectProps) {
         state={props.state}
         onInput={onSearch}
         onFocus={onSearchFocus}
-        onBlur={onSearchBlur}
         onClick={onSearchClick}
         onKeyDown={onSearchKeyDown}
       />
@@ -389,8 +393,6 @@ export default function SingleSelect(props: SingleSelectProps) {
             left: optionsContainerStyles.left,
             width: optionsContainerStyles.width,
           }}
-          onMouseEnter={onMouseEnterInOptions}
-          onMouseLeave={onMouseLeaveFromOptions}
         >
           <div
             className={optionsWrapClasses}
