@@ -1,0 +1,10 @@
+.ss-app-container {
+  padding: $spacing-6 $gutter-page $gutter-page;
+}
+
+@include lg {
+  .ss-app-container {
+    padding: $gutter-page-lg;
+    border-bottom-width: 0;
+  }
+}

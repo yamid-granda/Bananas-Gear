@@ -17,7 +17,7 @@
     "jsx": "react-jsx",
     "paths": {
       "@/app/*": ["./src/*"],
-      "@/ui/*": ["../ui/*"],
+      "@/ui/*": ["../ui/src/*"]
     }
   },
   "include": ["src"],

@@ -1,16 +1,12 @@
-import { useState } from 'react'
-import Input from '@/ui/components/Input'
+import Login from '@/app//modules/Login/components/Login'
+import AppContainer from '@/ui/components/AppContainer'
 
 function App() {
-  const [inputValue, setInputValue] = useState('jazz')
-
   return (
     <div>
-      <Input
-        value={inputValue}
-        onInput={setInputValue}
-      />
-      { inputValue }
+      <AppContainer>
+        <Login />
+      </AppContainer>
     </div>
   )
 }

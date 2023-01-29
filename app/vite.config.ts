@@ -9,7 +9,7 @@ export default defineConfig({
 
   resolve: {
     alias: [
-      { find: '@/ui', replacement: path.resolve(__dirname, '../ui') },
+      { find: '@/ui', replacement: path.resolve(__dirname, '../ui/src') },
       { find: '@/app', replacement: path.resolve(__dirname, './src') },
     ],
   },

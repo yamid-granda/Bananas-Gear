@@ -38,6 +38,7 @@ $input-height-without-border: $input-height - ($border-width * 2);
   background-color: transparent;
   color: $color-text-light;
   pointer-events: none;
+  text-transform: capitalize;
   transition: $transition-base;
 }
 

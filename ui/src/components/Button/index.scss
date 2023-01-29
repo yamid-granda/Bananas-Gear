@@ -1,0 +1,27 @@
+.ss-button {
+  display: inline-block;
+  min-height: $input-height;
+  padding: $spacing-4 $input-padding;
+  border: $border-base;
+  border-color: $color-primary;
+  border-radius: $border-radius-base;
+  background-color: $color-primary;
+  color: $color-white;
+  cursor: pointer;
+  outline: none;
+  transition: $transition-base;
+
+  &:hover {
+    background-color: $color-primary-hover;
+  }
+}
+
+.ss-button--secondary {
+  border-color: $color-paper-2;
+  background-color: $color-paper-2;
+  color: $color-text;
+
+  &:hover {
+    background-color: $color-paper-1;
+  }
+}

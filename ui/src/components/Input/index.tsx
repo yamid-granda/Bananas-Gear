@@ -7,7 +7,7 @@ import type { HTMLInputEvent, State } from '@/ui/types'
 export interface InputProps {
   value: string
   name: string
-  label?: string
+  label: string
   state?: State
   message?: string
   onInput?: (value: string, event: HTMLInputEvent) => void
