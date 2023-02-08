@@ -1,0 +1,5 @@
+COMPANIES_TABLE_IAM:
+  Effect: Allow
+  Action:
+    - dynamodb:PutItem
+  Resource: arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/${self:custom.DB.prefix}-Companies-${self:provider.stage}

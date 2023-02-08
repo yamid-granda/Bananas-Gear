@@ -1,0 +1,6 @@
+CompanyRegisterRequestsTableIAM:
+  Effect: Allow
+  Action:
+    - dynamodb:PutItem
+    - dynamodb:UpdateItem
+  Resource: ${self:custom.CompanyRegisterRequestsTable.arn}

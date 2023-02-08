@@ -1,7 +1,9 @@
+import type { FormEvent } from 'react'
 import { useReducer } from 'react'
 import Input from '@/ui/components/Input'
 import FormItem from '@/ui/components/FormItem'
 import Button from '@/ui/components/Button'
+import { login } from '@/ui/services/auth'
 
 interface LoginForm {
   email: string
@@ -17,9 +19,15 @@ export default function Login() {
     },
   )
 
+  async function onSubmit(event: FormEvent) {
+    event.preventDefault()
+    const res = await login({ email: form.email, password: form.password })
+    console.log(res)
+  }
+
   return (
     <div className="ss-login">
-      <form>
+      <form onSubmit={onSubmit}>
         <FormItem>
           <Input
             value={form.email}

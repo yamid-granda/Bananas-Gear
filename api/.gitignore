@@ -1,0 +1,20 @@
+# package
+node_modules
+jspm_packages
+
+# Serverless
+.serverless
+
+# Compiled
+.build
+.webpack
+
+# DB
+.dynamodb
+
+# Cache
+.tsbuildinfo
+.pnpm-debug.log
+
+# Secrets
+secrets.json

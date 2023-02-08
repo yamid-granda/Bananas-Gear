@@ -1,0 +1,7 @@
+export * from './createDynamoDBDocument'
+export * from './deleteDynamoDBDocument'
+export * from './dynamoDB.client'
+export * from './getDynamoDBDocument'
+export * from './queryDynamoDBDocuments'
+export * from './scanDynamoDBDocuments'
+export * from './updateDynamoDBDocument'
