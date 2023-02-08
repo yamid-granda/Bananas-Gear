@@ -3,7 +3,7 @@
 // import { auth } from '../../../composables/useAuth'
 // import { addNotifications } from '../../../composables/notifications'
 // import { clearSessionUser, loggedUser } from '../../../composables/loggedUser'
-import { PRODUCTION_API_URL, TEST_API_URL } from '@/ui/configs'
+import { PRODUCTION_API_URL, TEST_API_URL } from '@/app/configs'
 
 export interface ApiRes<Res> {
   ok: boolean

@@ -1,4 +1,4 @@
-import type { KeyboardEvent, MouseEvent, RefObject } from 'react'
+import type { InputHTMLAttributes, KeyboardEvent, MouseEvent, RefObject } from 'react'
 import { forwardRef, useImperativeHandle, useMemo, useRef, useState } from 'react'
 import './index.scss'
 import classnames from 'classnames'
@@ -10,6 +10,7 @@ export interface InputProps {
   label: string
   state?: State
   message?: string
+  type?: InputHTMLAttributes<HTMLInputElement>['type']
   onInput?: (value: string, event: HTMLInputEvent) => void
   onFocus?: (event: HTMLInputEvent) => void
   onBlur?: (event: HTMLInputEvent) => void
@@ -105,6 +106,7 @@ const Input = forwardRef<InputRefs, InputProps>((props, forwardedRef) => {
           ref={inputRef}
           className='ss-input__input'
           value={props.value}
+          type={props.type}
           onInput={onInput}
           onFocus={onFocus}
           onBlur={onBlur}

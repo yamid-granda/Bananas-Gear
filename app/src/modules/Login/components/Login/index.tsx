@@ -3,7 +3,7 @@ import { useReducer } from 'react'
 import Input from '@/ui/components/Input'
 import FormItem from '@/ui/components/FormItem'
 import Button from '@/ui/components/Button'
-import { login } from '@/ui/services/auth'
+import { login } from '@/app/modules/Login/services/auth'
 
 interface LoginForm {
   email: string
@@ -39,10 +39,11 @@ export default function Login() {
 
         <FormItem>
           <Input
-            value={form.email}
+            value={form.password}
             name="password"
             label="Password"
-            onInput={email => setForm({ email })}
+            onInput={password => setForm({ password })}
+            type="password"
           />
         </FormItem>
 

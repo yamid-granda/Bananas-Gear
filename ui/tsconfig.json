@@ -17,8 +17,9 @@
     "jsx": "react-jsx",
     "paths": {
       "@/ui/*": ["./src/*"],
+      "@/api/*": ["../api/*"]
     }
   },
-  "include": ["src"],
+  "include": ["src", "../app/src/modules/Login/services/auth", "../app/src/configs", "../app/src/clients"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

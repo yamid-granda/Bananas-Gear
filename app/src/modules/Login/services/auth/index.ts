@@ -1,7 +1,7 @@
 import type { ApiRes } from '@/api/types'
 import type { UserLoginRes } from '@/api/modules/Users/functions/'
-import { UsersApiPath } from '@/api/modules'
-import { httpPost } from '@/ui/clients/http'
+import { httpPost } from '@/app/clients/http'
+import { UsersApiPath } from '@/api/modules/Users/config'
 
 interface LoginConfig {
   email: string
