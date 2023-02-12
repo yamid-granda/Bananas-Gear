@@ -1,14 +1,29 @@
-// import type { NotificationCreator } from '../..'
-// import { getApiUrl } from '../..'
-// import { auth } from '../../../composables/useAuth'
-// import { addNotifications } from '../../../composables/notifications'
-// import { clearSessionUser, loggedUser } from '../../../composables/loggedUser'
 import { PRODUCTION_API_URL, TEST_API_URL } from '@/app/configs'
 
-export interface ApiRes<Res> {
-  ok: boolean
-  response: Res
+interface SuccessApiRes<Result> {
+  isOk: true
+  result: Result
 }
+
+enum ErrorName {
+  AbortError = 'AbortError',
+  FetchRequestError = 'FetchRequestError',
+  FetchEmptyResponse = 'FetchEmptyResponse',
+  FetchErrorResponse = 'FetchErrorResponse',
+}
+
+interface ApiResError {
+  message: string
+  code?: string
+  name: ErrorName
+}
+
+interface ErrorApiRes {
+  isOk: false
+  error: ApiResError
+}
+
+export type ApiRes<Result> = SuccessApiRes<Result> | ErrorApiRes
 
 export interface CustomRequestInit extends RequestInit {
   searchParams?: any
@@ -17,15 +32,15 @@ export interface CustomRequestInit extends RequestInit {
 
 export const getApiUrl = (): string => {
   const host = window?.location?.host
-  const subdomain = host.split('.')[1] ? host.split('.')[0] : null
+  const hostSplit = host?.split('.') || []
+  const hasSubdomain = hostSplit.length > 2
+  const subdomain = hasSubdomain ? hostSplit[0] : null
   return subdomain === 'app' ? PRODUCTION_API_URL : TEST_API_URL
 }
 
-const defaultHeaders: HeadersInit = {
-  'Content-Type': 'application/json',
-}
+const defaultHeaders: HeadersInit = { 'Content-Type': 'application/json' }
 
-async function httpClient(url: string, config: CustomRequestInit): Promise<ApiRes<any>> {
+async function httpRequest(path: string, config: CustomRequestInit): Promise<ApiRes<any>> {
   // const Authorization = auth.value.token ? `Bearer ${auth.value.token}/${loggedUser.value.type}/${loggedUser.value.id}` : ''
 
   const headers: HeadersInit = {
@@ -34,57 +49,86 @@ async function httpClient(url: string, config: CustomRequestInit): Promise<ApiRe
     // Authorization,
   }
 
-  const response: Response | null = await fetch(`${getApiUrl()}${url}`,
-    {
-      ...config,
-      headers,
-    },
-  ).catch((error) => {
-    console.error(error)
-    return null
-  })
+  const apiUrl = getApiUrl()
+  const url = `${apiUrl}${path}`
 
-  const json = { ok: false, response: null }
+  try {
+    const response = await fetch(url, { ...config, headers })
 
-  if (!response)
-    return json
+    if (!response) {
+      return {
+        isOk: false,
+        error: {
+          message: 'No response',
+          name: ErrorName.FetchEmptyResponse,
+        },
+      }
+    }
 
-  // if ([401, 403].includes(response.status))
-  //   clearSessionUser()
+    const jsonResponse = await response.json().catch(() => null)
 
-  const jsonResponse = await response.json().catch(() => null)
-  if (response.ok) {
-    json.ok = true
-    json.response = jsonResponse.response || jsonResponse
+    if (!response.ok) {
+      return {
+        isOk: false,
+        error: {
+          message: jsonResponse?.message || jsonResponse?.errorMessage || jsonResponse,
+          name: ErrorName.FetchErrorResponse,
+        },
+      }
+    }
+
+    return { isOk: true, result: jsonResponse }
+  }
+  catch (error) {
+    const resError = error as ApiResError
+
+    return {
+      isOk: false,
+      error: {
+        message: resError?.message || 'fetch error',
+        name: resError?.name || ErrorName.FetchRequestError,
+      },
+    }
   }
 
-  // else {
-  // const responseMessage = jsonResponse?.message || jsonResponse?.errorMessage || jsonResponse
+  // const json = { ok: false, response: null }
 
-  // if (responseMessage) {
-  // const allowsNotifications = !config.preventNotifications
+  // // if ([401, 403].includes(response.status))
+  // //   clearSessionUser()
 
-  // if (allowsNotifications) {
-  //   let pageNotifications: NotificationCreator[] = []
-
-  //   if (Array.isArray(responseMessage)) {
-  //     pageNotifications = responseMessage.map((message: string) => ({
-  //       message,
-  //       type: 'danger',
-  //     }))
-  //   }
-  //   else {
-  //     pageNotifications = [{ message: responseMessage, type: 'danger' }]
-  //   }
-
-  //   addNotifications(pageNotifications)
-  // }
+  // const jsonResponse = await response.json().catch(() => null)
+  // if (response.ok) {
+  //   json.ok = true
+  //   json.response = jsonResponse.response || jsonResponse
   // }
 
-  // if (jsonResponse?.statusCode === 403)
-  //   clearSessionUser()
-  // }
-  return json
+  // // else {
+  // // const responseMessage = jsonResponse?.message || jsonResponse?.errorMessage || jsonResponse
+
+  // // if (responseMessage) {
+  // // const allowsNotifications = !config.preventNotifications
+
+  // // if (allowsNotifications) {
+  // //   let pageNotifications: NotificationCreator[] = []
+
+  // //   if (Array.isArray(responseMessage)) {
+  // //     pageNotifications = responseMessage.map((message: string) => ({
+  // //       message,
+  // //       type: 'danger',
+  // //     }))
+  // //   }
+  // //   else {
+  // //     pageNotifications = [{ message: responseMessage, type: 'danger' }]
+  // //   }
+
+  // //   addNotifications(pageNotifications)
+  // // }
+  // // }
+
+  // // if (jsonResponse?.statusCode === 403)
+  // //   clearSessionUser()
+  // // }
+  // return { isOk: true, result: json.response }
 }
 
 function parseDicToSearchParams(params: object) {
@@ -104,7 +148,7 @@ export async function httpGet<Res>(url: string, config: CustomRequestInit = {}):
   if (config.searchParams)
     reqUrl = `${url}?${parseDicToSearchParams(config.searchParams)}`
 
-  return httpClient(reqUrl, { method: 'GET', ...config })
+  return httpRequest(reqUrl, { method: 'GET', ...config })
 }
 
 export async function httpPost<Res>(
@@ -112,7 +156,7 @@ export async function httpPost<Res>(
   body?: any,
   config?: CustomRequestInit,
 ): Promise<ApiRes<Res>> {
-  return httpClient(url, {
+  return httpRequest(url, {
     method: 'POST',
     body: JSON.stringify(body),
     ...config,
@@ -124,7 +168,7 @@ export async function httpPatch<Res>(
   body?: any,
   config?: CustomRequestInit,
 ): Promise<ApiRes<Res>> {
-  return httpClient(url, {
+  return httpRequest(url, {
     method: 'PATCH',
     body: JSON.stringify(body),
     ...config,
@@ -135,7 +179,7 @@ export async function httpDelete<Res>(
   url: string,
   config?: CustomRequestInit,
 ): Promise<ApiRes<Res>> {
-  return httpClient(url, {
+  return httpRequest(url, {
     method: 'DELETE',
     ...config,
   })
