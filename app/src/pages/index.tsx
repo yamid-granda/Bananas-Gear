@@ -1,7 +1,10 @@
 import { Navigate } from 'react-router-dom'
+import { useHasLoggedUser } from '../hooks/loggedUser'
 
 export default function Home() {
-  if (true)
+  const hasLoggedUser = useHasLoggedUser()
+
+  if (!hasLoggedUser)
     return <Navigate to="/login" />
 
   // const router = useNavigate()

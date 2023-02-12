@@ -1,9 +1,11 @@
 import type { FormEvent } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useReducer, useState } from 'react'
 import Input from '@/ui/components/Input'
 import FormItem from '@/ui/components/FormItem'
 import Button from '@/ui/components/Button'
 import { login } from '@/app/modules/Login/services/auth'
+import { useLoggedUser } from '@/app/hooks/loggedUser'
 
 interface LoginForm {
   email: string
@@ -11,9 +13,12 @@ interface LoginForm {
 }
 
 export default function Login() {
+  const navigate = useNavigate()
+
+  const [, setLoggedUser] = useLoggedUser()
+
   const [form, setForm] = useReducer(
-    (prev: LoginForm, next: Partial<LoginForm>) => ({ ...prev, ...next }),
-    {
+    (prev: LoginForm, next: Partial<LoginForm>) => ({ ...prev, ...next }), {
       email: '',
       password: '',
     },
@@ -26,9 +31,20 @@ export default function Login() {
     setIsLoggingIn(true)
     const response = await login({ email: form.email, password: form.password })
 
-    console.log(response)
+    if (!response.isOk) {
+      setIsLoggingIn(false)
+      return
+    }
 
-    // if (response.)
+    setLoggedUser({
+      token: response.result.token,
+      id: response.result.user.id,
+      companyId: response.result.user.companyId,
+      email: response.result.user.email,
+      expiresIn: response.result.expiresIn,
+    })
+
+    navigate('/')
 
     setIsLoggingIn(false)
   }

@@ -77,8 +77,11 @@ async function httpRequest(path: string, config: CustomRequestInit): Promise<Api
       }
     }
 
-    return { isOk: true, result: jsonResponse }
+    const result = jsonResponse?.response || jsonResponse
+
+    return { isOk: true, result }
   }
+
   catch (error) {
     const resError = error as ApiResError
 
