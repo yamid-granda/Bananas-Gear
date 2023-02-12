@@ -70,10 +70,10 @@ const Input = forwardRef<InputRefs, InputProps>((props, forwardedRef) => {
 
     return (
       <label
-        className='ss-input__label'
+        className="ss-input__label"
         htmlFor={props.name}
       >
-        <span className='ss-input__label-text'>{props.label}</span>
+        <span className="ss-input__label-text">{props.label}</span>
       </label>
     )
   }, [props.label])
@@ -83,8 +83,8 @@ const Input = forwardRef<InputRefs, InputProps>((props, forwardedRef) => {
       return null
 
     return (
-      <div className='ss-input__message'>
-        <span className='ss-input__message-text'>{props.message}</span>
+      <div className="ss-input__message">
+        <span className="ss-input__message-text">{props.message}</span>
       </div>
     )
   }, [props.message])
@@ -104,7 +104,7 @@ const Input = forwardRef<InputRefs, InputProps>((props, forwardedRef) => {
       <div className="ss-input__wrap">
         <input
           ref={inputRef}
-          className='ss-input__input'
+          className="ss-input__input"
           value={props.value}
           type={props.type}
           onInput={onInput}

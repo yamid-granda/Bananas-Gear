@@ -32,6 +32,16 @@ export const Default: ComponentStory<typeof Button> = () => {
   )
 }
 
+export const loading: ComponentStory<typeof Button> = () => {
+  return (
+    <>
+      <Button isLoading={true}>
+        Button Text
+      </Button>
+    </>
+  )
+}
+
 export const Secondary: ComponentStory<typeof Button> = () => {
   const [isOpen, setIsOpen] = useState(false)
 
@@ -42,7 +52,7 @@ export const Secondary: ComponentStory<typeof Button> = () => {
   return (
     <>
       <Button
-        variant='secondary'
+        variant="secondary"
         onClick={onButtonClick}
       >
         Button Text

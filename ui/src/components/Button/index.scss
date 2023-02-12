@@ -1,6 +1,7 @@
 .ss-button {
-  display: inline-block;
+  display: inline-flex;
   min-height: $input-height;
+  align-items: stretch;
   padding: $spacing-4 $input-padding;
   border: $border-base;
   border-color: $color-primary;
@@ -10,10 +11,26 @@
   cursor: pointer;
   outline: none;
   transition: $transition-base;
+  user-select: none;
 
   &:hover {
     background-color: $color-primary-hover;
   }
+}
+
+.ss-button__loading {
+  display: flex;
+  align-items: flex-start;
+  margin-top: $spacing-3 + $spacing-1;
+
+  &::after {
+    content: '\00a0';
+  }
+}
+
+.ss-button__text {
+  display: flex;
+  align-items: center;
 }
 
 .ss-button--secondary {
@@ -23,5 +40,26 @@
 
   &:hover {
     background-color: $color-paper-1;
+  }
+}
+
+.ss-button--disabled {
+  border-color: $color-paper-3;
+  background-color: $color-paper-3;
+  color: $color-text-light;
+  cursor: not-allowed;
+
+  &:hover {
+    border-color: $color-paper-3;
+    background-color: $color-paper-3;
+    color: $color-text-light;
+  }
+}
+
+.ss-button--loading {
+  background-color: $color-primary-hover;
+
+  &:hover {
+    background-color: $color-primary-hover;
   }
 }

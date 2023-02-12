@@ -1,5 +1,5 @@
 import type { FormEvent } from 'react'
-import { useReducer } from 'react'
+import { useReducer, useState } from 'react'
 import Input from '@/ui/components/Input'
 import FormItem from '@/ui/components/FormItem'
 import Button from '@/ui/components/Button'
@@ -19,10 +19,18 @@ export default function Login() {
     },
   )
 
+  const [isLoggingIn, setIsLoggingIn] = useState(false)
+
   async function onSubmit(event: FormEvent) {
     event.preventDefault()
-    const res = await login({ email: form.email, password: form.password })
-    console.log(res)
+    setIsLoggingIn(true)
+    const response = await login({ email: form.email, password: form.password })
+
+    console.log(response)
+
+    // if (response.)
+
+    setIsLoggingIn(false)
   }
 
   return (
@@ -47,7 +55,7 @@ export default function Login() {
           />
         </FormItem>
 
-        <Button>Login</Button>
+        <Button isLoading={isLoggingIn}>Login</Button>
       </form>
     </div>
   )
