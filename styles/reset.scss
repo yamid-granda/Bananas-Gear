@@ -1,5 +1,15 @@
 @import './index';
 
+@font-face {
+  font-family: Regular;
+  src:
+    url('../app/src/fonts/Arial/8d223b3ad8d4819e9dcf22757e4cc2c4.eot?#iefix') format('embedded-opentype'),
+    url('../app/src/fonts/Arial/8d223b3ad8d4819e9dcf22757e4cc2c4.woff2') format('woff2'),
+    url('../app/src/fonts/Arial/8d223b3ad8d4819e9dcf22757e4cc2c4.woff') format('woff'),
+    url('../app/src/fonts/Arial/8d223b3ad8d4819e9dcf22757e4cc2c4.ttf') format('truetype'),
+    url('../app/src/fonts/Arial/8d223b3ad8d4819e9dcf22757e4cc2c4.svg#Arial') format('svg'); /* iOS 4.1- */
+}
+
 // -------------------------------------------------
 // + Base Reset Styles
 // -------------------------------------------------
@@ -38,8 +48,8 @@ body {
   margin: 0;
   background-color: $color-body;
   color: $color-text;
-  font-family: Arial, sans-serif;
-  font-size: $font-size-default;
+  font-family: Regular, Arial, sans-serif;
+  font-size: 1rem;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   line-height: 1.35;

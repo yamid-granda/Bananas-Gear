@@ -32,7 +32,7 @@ export const Default: ComponentStory<typeof Button> = () => {
   )
 }
 
-export const loading: ComponentStory<typeof Button> = () => {
+export const Loading: ComponentStory<typeof Button> = () => {
   return (
     <>
       <Button isLoading={true}>

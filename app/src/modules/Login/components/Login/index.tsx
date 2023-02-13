@@ -1,9 +1,11 @@
 import type { FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useReducer, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import Input from '@/ui/components/Input'
 import FormItem from '@/ui/components/FormItem'
 import Button from '@/ui/components/Button'
+import Card from '@/ui/components/Card'
 import { login } from '@/app/modules/Login/services/auth'
 import { useLoggedUser } from '@/app/hooks/loggedUser'
 
@@ -14,6 +16,7 @@ interface LoginForm {
 
 export default function Login() {
   const navigate = useNavigate()
+  const { t } = useTranslation('pages/login')
 
   const [, setLoggedUser] = useLoggedUser()
 
@@ -49,30 +52,40 @@ export default function Login() {
     setIsLoggingIn(false)
   }
 
+  const title = t('title')
+
   return (
     <div className="ss-login">
-      <form onSubmit={onSubmit}>
-        <FormItem>
-          <Input
-            value={form.email}
-            name="email"
-            label="Email"
-            onInput={email => setForm({ email })}
-          />
-        </FormItem>
+      <Card>
+        <form onSubmit={onSubmit}>
+          <h1>{ title }</h1>
 
-        <FormItem>
-          <Input
-            value={form.password}
-            name="password"
-            label="Password"
-            onInput={password => setForm({ password })}
-            type="password"
-          />
-        </FormItem>
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi sapiente sint vero omnis maxime. Nisi aliquid quaerat laboriosam voluptatum quia sit ducimus, qui officia enim similique dicta sunt possimus quo!</p>
 
-        <Button isLoading={isLoggingIn}>Login</Button>
-      </form>
+          <FormItem>
+            <Input
+              value={form.email}
+              name="email"
+              label="Email"
+              onInput={email => setForm({ email })}
+            />
+          </FormItem>
+
+          <FormItem>
+            <Input
+              value={form.password}
+              name="password"
+              label="Password"
+              onInput={password => setForm({ password })}
+              type="password"
+            />
+          </FormItem>
+
+          <FormItem>
+            <Button isLoading={isLoggingIn}>Login</Button>
+          </FormItem>
+        </form>
+      </Card>
     </div>
   )
 }

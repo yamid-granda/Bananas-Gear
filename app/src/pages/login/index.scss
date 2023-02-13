@@ -1,0 +1,15 @@
+.ss-login-page {
+  align-items: center;
+  justify-content: center;
+
+  .ss-login {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+}
+
+@include lg {
+  .ss-login-page {
+    padding-top: $input-height;
+  }
+}
