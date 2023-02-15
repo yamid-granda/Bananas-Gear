@@ -2,12 +2,16 @@
 
 @font-face {
   font-family: Regular;
-  src:
-    url('../app/src/fonts/Arial/8d223b3ad8d4819e9dcf22757e4cc2c4.eot?#iefix') format('embedded-opentype'),
-    url('../app/src/fonts/Arial/8d223b3ad8d4819e9dcf22757e4cc2c4.woff2') format('woff2'),
-    url('../app/src/fonts/Arial/8d223b3ad8d4819e9dcf22757e4cc2c4.woff') format('woff'),
-    url('../app/src/fonts/Arial/8d223b3ad8d4819e9dcf22757e4cc2c4.ttf') format('truetype'),
-    url('../app/src/fonts/Arial/8d223b3ad8d4819e9dcf22757e4cc2c4.svg#Arial') format('svg'); /* iOS 4.1- */
+  font-style: normal;
+  font-weight: 500;
+  src: url('@/ui/fonts/OpenSans/OpenSans-SemiBold.ttf');
+}
+
+@font-face {
+  font-family: Regular;
+  font-style: normal;
+  font-weight: 400;
+  src: url('@/ui/fonts/OpenSans/OpenSans-Regular.ttf');
 }
 
 // -------------------------------------------------
@@ -114,7 +118,7 @@ a:visited:hover {
 h1,
 h2,
 h3 {
-  font-weight: 600;
+  font-weight: $bold;
 }
 
 h1,
