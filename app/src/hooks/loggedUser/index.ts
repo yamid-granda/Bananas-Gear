@@ -25,7 +25,7 @@ const { useGlobalState } = createGlobalState<LoggedUserState>({
 
 export const useLoggedUser = () => useGlobalState('loggedUser')
 
-export const useHasLoggedUser: () => Boolean = () => {
+export const useHasLoggedUser: () => boolean = () => {
   const [loggedUser] = useLoggedUser()
   return useMemo(() => loggedUser.token !== '', [loggedUser])
 }
